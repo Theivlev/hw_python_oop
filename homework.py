@@ -1,4 +1,4 @@
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 
 
 @dataclass
@@ -9,19 +9,21 @@ class InfoMessage:
     distance: float
     speed: float
     calories: float
-    messag_trainig: str = ('Тип тренировки: {training_type}; '
-                           'Длительность: {duration:.3f} ч.; '
-                           'Дистанция: {distance:.3f} км; '
-                           'Ср. скорость: {speed:.3f} км/ч; '
-                           'Потрачено ккал: {calories:.3f}.'
-                           )
+
+    MESSAG_TRAINING: str = ('Тип тренировки: {training_type}; '
+                            'Длительность: {duration:.3f} ч.; '
+                            'Дистанция: {distance:.3f} км; '
+                            'Ср. скорость: {speed:.3f} км/ч; '
+                            'Потрачено ккал: {calories:.3f}.'
+                            )
 
     def get_message(self) -> str:
-        return self.messag_trainig.format(**asdict(self))
+        return self.MESSAG_TRAINING.format(**asdict(self))
 
 
 class Training:
     """Базовый класс тренировки."""
+
     LEN_STEP: float = 0.65
     M_IN_KM: int = 1000
     M_IN_HOUR: int = 60
@@ -58,9 +60,11 @@ class Training:
 
 
 class Running(Training):
+    """Тренировка: бег."""
+
     COEF_FOR_CALC_CALORIES_RUN_1: int = 18
     COEF_FOR_CALC_CALORIES_RUN_2: int = 20
-    """Тренировка: бег."""
+
     def get_spent_calories(self) -> float:
         return ((self.COEF_FOR_CALC_CALORIES_RUN_1 * self.get_mean_speed()
                 - self.COEF_FOR_CALC_CALORIES_RUN_2) * self.weight_kg
@@ -68,10 +72,11 @@ class Running(Training):
 
 
 class SportsWalking(Training):
+    """Тренировка: спортивная ходьба."""
+
     COEF_FOR_CALC_CALORIES_WLK_1: float = 0.035
     COEF_FOR_CALC_CALORIES_WLK_2: float = 0.029
     COEF_FOR_CALC_CALORIES_WLK_3: int = 2
-    """Тренировка: спортивная ходьба."""
 
     def __init__(self,
                  action: int,
@@ -91,10 +96,11 @@ class SportsWalking(Training):
 
 
 class Swimming(Training):
+    """Тренировка: плавание."""
+
     LEN_STEP: float = 1.38
     COEF_FOR_CALC_CALORIES_SWIM_1: float = 1.1
     COEF_FOR_CALC_CALORIES_SWIM_2: int = 2
-    """Тренировка: плавание."""
 
     def __init__(self,
                  action: int,
